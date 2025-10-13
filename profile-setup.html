@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Setup - CollabLearn</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== CSS Variables for Theme Management ========== */
+        :root {
+            --primary-sky: #576fe6;
+            --primary-violet: #965caf;
+            --accent-pink: #F1948A;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --text-dark: #2C3E50;
+            --text-muted: #7F8C8D;
+            --border-radius: 12px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+        }
+        
+        /* ========== Global Styles ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #E8F4F8 0%, #F4ECF7 100%);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* ========== Navigation Bar ========== */
+        .navbar {
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 0;
+        }
+        
+        .navbar-brand {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-sky);
+        }
+        
+        /* ========== Profile Setup Container ========== */
+        .setup-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+        
+        .setup-card {
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-md);
+            padding: 3rem;
+        }
+        
+        .setup-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .setup-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .setup-header p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+        
+        .progress-bar-custom {
+            height: 8px;
+            border-radius: 10px;
+            background-color: var(--bg-light);
+            margin-bottom: 2rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        /* ========== Form Sections ========== */
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .section-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-label i {
+            margin-right: 0.5rem;
+            color: var(--primary-sky);
+        }
+        
+        /* ========== Image Upload ========== */
+        .image-upload-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-image-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--bg-light), #E8F4F8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 4px solid var(--primary-sky);
+            margin-bottom: 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .profile-image-preview:hover {
+            transform: scale(1.05);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .profile-image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-image-preview i {
+            font-size: 3rem;
+            color: var(--text-muted);
+        }
+        
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .upload-btn {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        /* ========== Form Controls ========== */
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid var(--bg-light);
+            border-radius: var(--border-radius);
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+            font-family: 'Lato', sans-serif;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-sky);
+            box-shadow: 0 0 0 0.2rem rgba(93, 173, 226, 0.25);
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        /* ========== Skills Input with Tags ========== */
+        .skills-input-container {
+            border: 2px solid var(--bg-light);
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            transition: var(--transition);
+            background: var(--bg-white);
+        }
+        
+        .skills-input-container:focus-within {
+            border-color: var(--primary-sky);
+            box-shadow: 0 0 0 0.2rem rgba(93, 173, 226, 0.25);
+        }
+        
+        .skill-tag {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .skill-tag .remove-tag {
+            cursor: pointer;
+            font-weight: bold;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .skill-tag .remove-tag:hover {
+            opacity: 1;
+        }
+        
+        .skill-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 150px;
+            padding: 0.5rem;
+            font-family: 'Lato', sans-serif;
+        }
+        
+        .skill-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .skill-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+        
+        .skill-error {
+            font-size: 0.85rem;
+            color: #E74C3C;
+            margin-top: 0.5rem;
+            display: none;
+            font-weight: 600;
+        }
+        
+        .skill-error.show {
+            display: block;
+        }
+        
+        .skills-input-container.error {
+            border-color: #E74C3C;
+            box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.15);
+        }
+        
+        /* ========== Buttons ========== */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            border: none;
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-outline-custom {
+            border: 2px solid var(--primary-sky);
+            color: var(--primary-sky);
+            padding: 0.8rem 2rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            background: transparent;
+            transition: var(--transition);
+            width: 100%;
+            font-size: 1.1rem;
+        }
+        
+        .btn-outline-custom:hover {
+            background: var(--primary-sky);
+            color: white;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+        
+        /* ========== Responsive Design ========== */
+        @media (max-width: 768px) {
+            .setup-card {
+                padding: 2rem 1.5rem;
+            }
+            
+            .setup-header h1 {
+                font-size: 2rem;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ========== Navigation Bar ========== -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-graduation-cap"></i> CollabLearn
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- ========== Profile Setup Container ========== -->
+    <div class="setup-container">
+        <div class="setup-card">
+            
+            <!-- Header -->
+            <div class="setup-header">
+                <h1>Complete Your Profile</h1>
+                <p>Let's set up your learning profile to find the best matches</p>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="progress-bar-custom">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <!-- Profile Setup Form -->
+            <form id="profileSetupForm">
+                
+                <!-- Profile Image Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-camera"></i> Profile Picture
+                    </div>
+                    <div class="image-upload-container">
+                        <div class="profile-image-preview" id="imagePreview">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="upload-btn-wrapper">
+                            <button type="button" class="upload-btn">
+                                <i class="fas fa-upload me-2"></i>Upload Photo
+                            </button>
+                            <input type="file" id="profileImage" name="profileImage" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Basic Info Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-user-circle"></i> Basic Information
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="firstName" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter first name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="lastName" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter last name" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-3">
+                        <label for="bio" class="form-label">Bio</label>
+                        <textarea class="form-control" id="bio" name="bio" placeholder="Tell us about yourself, your interests, and what you're passionate about..." required></textarea>
+                    </div>
+                </div>
+                
+                <!-- Skills to Teach Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-chalkboard-teacher"></i> Skills You Can Teach
+                    </div>
+                    <div class="skills-input-container" id="teachSkillsContainer">
+                        <input type="text" class="skill-input" id="teachSkillInput" placeholder="Type a skill and press Enter (e.g., Python)">
+                    </div>
+                    <div class="skill-hint" id="teachSkillHint">
+                        <i class="fas fa-lightbulb"></i> <strong>Press Enter</strong> after typing each skill to add it as a tag
+                    </div>
+                    <div class="skill-error" id="teachSkillError">
+                        <i class="fas fa-exclamation-circle"></i> <span id="teachSkillErrorText"></span>
+                    </div>
+                </div>
+                
+                <!-- Skills to Learn Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-book-reader"></i> Skills You Want to Learn
+                    </div>
+                    <div class="skills-input-container" id="learnSkillsContainer">
+                        <input type="text" class="skill-input" id="learnSkillInput" placeholder="Type a skill and press Enter (e.g., React)">
+                    </div>
+                    <div class="skill-hint" id="learnSkillHint">
+                        <i class="fas fa-lightbulb"></i> <strong>Press Enter</strong> after typing each skill to add it as a tag
+                    </div>
+                    <div class="skill-error" id="learnSkillError">
+                        <i class="fas fa-exclamation-circle"></i> <span id="learnSkillErrorText"></span>
+                    </div>
+                </div>
+                
+                <!-- Availability Section -->
+                <div class="form-section">
+                    <div class="section-label">
+                        <i class="fas fa-clock"></i> Learning Preferences
+                    </div>
+                    
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="availability" class="form-label">Availability</label>
+                            <select class="form-select" id="availability" name="availability" required>
+                                <option value="">Select availability</option>
+                                <option value="weekdays">Weekdays</option>
+                                <option value="weekends">Weekends</option>
+                                <option value="both">Both</option>
+                                <option value="flexible">Flexible</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="learningMode" class="form-label">Preferred Learning Mode</label>
+                            <select class="form-select" id="learningMode" name="learningMode" required>
+                                <option value="">Select mode</option>
+                                <option value="online">Online Only</option>
+                                <option value="in-person">In-Person</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submit Buttons -->
+                <div class="button-group">
+                    <button type="button" class="btn btn-outline-custom" onclick="window.location.href='login.html'">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </button>
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="fas fa-check-circle me-2"></i>Complete Profile
+                    </button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // ========== Image Upload Preview ==========
+        const profileImageInput = document.getElementById('profileImage');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        profileImageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Profile Preview">`;
+                    updateProgress();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // ========== Skills Tag Management ==========
+        const teachSkills = [];
+        const learnSkills = [];
+        
+        // Function to show error for skill input
+        function showSkillError(type, message) {
+            const errorElement = document.getElementById(type + 'SkillError');
+            const errorText = document.getElementById(type + 'SkillErrorText');
+            const container = document.getElementById(type + 'SkillsContainer');
+            
+            errorText.textContent = message;
+            errorElement.classList.add('show');
+            container.classList.add('error');
+            
+            // Auto-hide after 3 seconds
+            setTimeout(() => {
+                errorElement.classList.remove('show');
+                container.classList.remove('error');
+            }, 10000);
+        }
+        
+        // Function to clear skill errors
+        function clearSkillError(type) {
+            const errorElement = document.getElementById(type + 'SkillError');
+            const container = document.getElementById(type + 'SkillsContainer');
+            
+            errorElement.classList.remove('show');
+            container.classList.remove('error');
+        }
+        
+        function createSkillTag(skill, container, skillsArray) {
+            const tag = document.createElement('div');
+            tag.className = 'skill-tag';
+            tag.innerHTML = `
+                ${skill}
+                <span class="remove-tag" onclick="removeSkill(this, '${skill}', '${container}')">&times;</span>
+            `;
+            
+            const input = document.getElementById(container === 'teachSkillsContainer' ? 'teachSkillInput' : 'learnSkillInput');
+            container = document.getElementById(container);
+            container.insertBefore(tag, input);
+            skillsArray.push(skill);
+            updateProgress();
+        }
+        
+        function removeSkill(element, skill, containerId) {
+            const skillsArray = containerId === 'teachSkillsContainer' ? teachSkills : learnSkills;
+            const index = skillsArray.indexOf(skill);
+            if (index > -1) {
+                skillsArray.splice(index, 1);
+            }
+            element.parentElement.remove();
+            updateProgress();
+        }
+        
+        // Handle Enter key for adding skills to TEACH
+        document.getElementById('teachSkillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const skill = this.value.trim();
+                
+                if (!skill) {
+                    showSkillError('teach', 'Please enter a skill name');
+                    return;
+                }
+                
+                if (teachSkills.includes(skill)) {
+                    showSkillError('teach', 'This skill is already added');
+                    this.value = '';
+                    return;
+                }
+                
+                clearSkillError('teach');
+                createSkillTag(skill, 'teachSkillsContainer', teachSkills);
+                this.value = '';
+                this.placeholder = 'Add another skill...';
+            }
+        });
+        
+        // Clear error when user starts typing in teach skills
+        document.getElementById('teachSkillInput').addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearSkillError('teach');
+            }
+        });
+        
+        // Handle Enter key for adding skills to LEARN
+        document.getElementById('learnSkillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const skill = this.value.trim();
+                
+                if (!skill) {
+                    showSkillError('learn', 'Please enter a skill name');
+                    return;
+                }
+                
+                if (learnSkills.includes(skill)) {
+                    showSkillError('learn', 'This skill is already added');
+                    this.value = '';
+                    return;
+                }
+                
+                clearSkillError('learn');
+                createSkillTag(skill, 'learnSkillsContainer', learnSkills);
+                this.value = '';
+                this.placeholder = 'Add another skill...';
+            }
+        });
+        
+        // Clear error when user starts typing in learn skills
+        document.getElementById('learnSkillInput').addEventListener('input', function() {
+            if (this.value.trim()) {
+                clearSkillError('learn');
+            }
+        });
+        
+        // ========== Progress Bar Update ==========
+        function updateProgress() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const bio = document.getElementById('bio').value;
+            const hasImage = imagePreview.querySelector('img') !== null;
+            const availability = document.getElementById('availability').value;
+            const learningMode = document.getElementById('learningMode').value;
+            
+            let progress = 0;
+            if (hasImage) progress += 15;
+            if (firstName) progress += 15;
+            if (lastName) progress += 15;
+            if (bio) progress += 15;
+            if (teachSkills.length > 0) progress += 20;
+            if (learnSkills.length > 0) progress += 20;
+            
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+        
+        // Add event listeners for progress tracking
+        document.getElementById('firstName').addEventListener('input', updateProgress);
+        document.getElementById('lastName').addEventListener('input', updateProgress);
+        document.getElementById('bio').addEventListener('input', updateProgress);
+        document.getElementById('availability').addEventListener('change', updateProgress);
+        document.getElementById('learningMode').addEventListener('change', updateProgress);
+        
+        // ========== Form Submission ==========
+        document.getElementById('profileSetupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Clear all previous errors
+            clearSkillError('teach');
+            clearSkillError('learn');
+            
+            let isValid = true;
+            
+            // Validate that at least one skill is added in each category
+            if (teachSkills.length === 0) {
+                showSkillError('teach', 'Please add at least one skill you can teach. Type a skill and press Enter.');
+                document.getElementById('teachSkillInput').focus();
+                isValid = false;
+            }
+            
+            if (learnSkills.length === 0) {
+                showSkillError('learn', 'Please add at least one skill you want to learn. Type a skill and press Enter.');
+                if (isValid) {
+                    document.getElementById('learnSkillInput').focus();
+                }
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                return;
+            }
+            
+            // Collect form data
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                bio: document.getElementById('bio').value,
+                teachSkills: teachSkills,
+                learnSkills: learnSkills,
+                availability: document.getElementById('availability').value,
+                learningMode: document.getElementById('learningMode').value,
+                profileImage: imagePreview.querySelector('img') ? imagePreview.querySelector('img').src : null
+            };
+            
+            console.log('Profile Setup Data:', formData);
+            console.log('Skills to Teach:', teachSkills);
+            console.log('Skills to Learn:', learnSkills);
+            
+            // TODO: Send data to backend
+            // For now, redirect to dashboard
+            window.location.href = 'dashboard.html';
+        });
+    </script>
+</body>
+</html>
