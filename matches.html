@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matches - CollabLearn</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== CSS Variables for Theme Management ========== */
+        :root {
+            --primary-sky: #576fe6;
+            --primary-violet: #965caf;
+            --accent-pink: #F1948A;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --text-dark: #2C3E50;
+            --text-muted: #7F8C8D;
+            --border-radius: 12px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+            --success-green: #27AE60;
+            --warning-orange: #F39C12;
+            --danger-red: #E74C3C;
+        }
+        
+        /* ========== Animations ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* ========== Global Styles ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* ========== Navigation Bar ========== */
+        .navbar {
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow-sm);
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-sky);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-sky);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            border-radius: 2px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-red);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-sky);
+        }
+        
+        .dropdown-toggle::after {
+            display: none;
+        }
+        
+        /* ========== Page Container ========== */
+        .page-container {
+            padding: 2rem 0;
+            min-height: calc(100vh - 200px);
+        }
+        
+        /* ========== Page Header ========== */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+        
+        .page-header h1 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        /* ========== Filter Section ========== */
+        .filter-section {
+            background: var(--bg-white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+        }
+        
+        .filter-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-dark);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+        
+        .form-select-custom {
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            padding: 0.6rem 1rem;
+            width: 100%;
+            font-family: 'Lato', sans-serif;
+            transition: var(--transition);
+        }
+        
+        .form-select-custom:focus {
+            outline: none;
+            border-color: var(--primary-sky);
+            box-shadow: 0 0 0 3px rgba(87, 111, 230, 0.1);
+        }
+        
+        /* ========== User Cards ========== */
+        .user-card {
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+            animation: fadeInUp 0.6s ease;
+            position: relative;
+        }
+        
+        .user-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px);
+        }
+        
+        .user-card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .user-card-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+            border: 3px solid var(--bg-light);
+        }
+        
+        .user-card-info {
+            flex-grow: 1;
+        }
+        
+        .user-card-info h5 {
+            margin: 0 0 0.25rem 0;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+        
+        .user-card-info p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        .match-score {
+            display: inline-block;
+            background: var(--success-green);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .user-card-body {
+            margin-bottom: 1.5rem;
+        }
+        
+        .skill-section {
+            margin-bottom: 1rem;
+        }
+        
+        .skill-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .skill-section strong {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-dark);
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(87, 111, 230, 0.1), rgba(150, 92, 175, 0.1));
+            color: var(--primary-sky);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin: 0.25rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .skill-tag:hover {
+            background: linear-gradient(135deg, rgba(87, 111, 230, 0.2), rgba(150, 92, 175, 0.2));
+        }
+        
+        /* ========== Buttons ========== */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            border: none;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            color: white;
+        }
+        
+        .btn-outline-custom {
+            border: 2px solid var(--primary-sky);
+            color: var(--primary-sky);
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            background: transparent;
+            transition: var(--transition);
+        }
+        
+        .btn-outline-custom:hover {
+            background: var(--primary-sky);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-sm-custom {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .btn-disabled {
+            background: #e0e0e0;
+            color: #9e9e9e;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: not-allowed;
+        }
+        
+        /* ========== Empty State ========== */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            color: var(--primary-sky);
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state h4 {
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* ========== Pagination ========== */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .pagination-custom .page-link {
+            color: var(--primary-sky);
+            border: 1px solid #e0e0e0;
+            padding: 0.5rem 1rem;
+            margin: 0 0.25rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            background-color: white;
+        }
+        
+        .pagination-custom .page-link:hover {
+            background-color: rgba(87, 111, 230, 0.1);
+            border-color: var(--primary-sky);
+            color: var(--primary-sky);
+        }
+        
+        .pagination-custom .page-item.active .page-link {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            border-color: var(--primary-sky);
+            color: white;
+        }
+        
+        /* ========== Footer ========== */
+        .footer {
+            background-color: var(--text-dark);
+            color: white;
+            padding: 2rem 0 1rem;
+            margin-top: 3rem;
+        }
+        
+        .footer p {
+            margin: 0;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        /* ========== Responsive Design ========== */
+        @media (max-width: 768px) {
+            .user-card-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .user-card-avatar {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ========== Navigation Bar ========== -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-graduation-cap"></i> CollabLearn
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="matches.html">
+                            <i class="fas fa-users me-1"></i>Matches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="connections.html">
+                            <i class="fas fa-user-friends me-1"></i>Connections
+                        </a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="requests.html">
+                            <i class="fas fa-bell me-1"></i>Requests
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="chat.html">
+                            <i class="fas fa-comments me-1"></i>Chat
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown ms-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <img src="https://i.pravatar.cc/150?img=12" alt="User Avatar" class="user-avatar">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile-setup.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- ========== Page Container ========== -->
+    <div class="page-container">
+        <div class="container">
+            
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1>Find Learning Partners</h1>
+                <p>Discover users with complementary skills to yours</p>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <h3>Filter Matches</h3>
+                <div class="filter-options">
+                    <div class="filter-group">
+                        <label for="skillFilter">Skill to Learn</label>
+                        <select class="form-select-custom" id="skillFilter">
+                            <option selected>All Skills</option>
+                            <option>Python</option>
+                            <option>JavaScript</option>
+                            <option>UI/UX Design</option>
+                            <option>Data Science</option>
+                            <option>Web Development</option>
+                            <option>Digital Marketing</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="matchFilter">Match Score</label>
+                        <select class="form-select-custom" id="matchFilter">
+                            <option selected>Any Match</option>
+                            <option>90%+ Match</option>
+                            <option>80%+ Match</option>
+                            <option>70%+ Match</option>
+                            <option>60%+ Match</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="locationFilter">Location</label>
+                        <select class="form-select-custom" id="locationFilter">
+                            <option selected>Any Location</option>
+                            <option>Same City</option>
+                            <option>Same Country</option>
+                            <option>Online Only</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Matches Grid -->
+            <div class="row">
+                <!-- Match Card 1 -->
+                <div class="col-lg-6">
+                    <div class="user-card">
+                        <div class="user-card-header">
+                            <img src="https://i.pravatar.cc/150?img=45" alt="Sarah Johnson" class="user-card-avatar">
+                            <div class="user-card-info">
+                                <h5>Sarah Johnson <span class="match-score">95% Match</span></h5>
+                                <p><i class="fas fa-map-marker-alt me-1"></i>New York, USA</p>
+                                <p><i class="fas fa-graduation-cap me-1"></i>Computer Science Student</p>
+                            </div>
+                        </div>
+                        <div class="user-card-body">
+                            <div class="skill-section">
+                                <strong>Can teach:</strong>
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">Machine Learning</span>
+                                <span class="skill-tag">Data Science</span>
+                                <span class="skill-tag">Statistics</span>
+                            </div>
+                            <div class="skill-section">
+                                <strong>Wants to learn:</strong>
+                                <span class="skill-tag">Web Development</span>
+                                <span class="skill-tag">React</span>
+                                <span class="skill-tag">UI Design</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary-custom btn-sm-custom flex-grow-1" onclick="sendConnection('Sarah Johnson', this)">
+                                <i class="fas fa-user-plus me-2"></i>Connect
+                            </button>
+                            <button class="btn btn-outline-custom btn-sm-custom">
+                                <i class="fas fa-eye me-2"></i>View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Match Card 2 -->
+                <div class="col-lg-6">
+                    <div class="user-card">
+                        <div class="user-card-header">
+                            <img src="https://i.pravatar.cc/150?img=33" alt="Michael Chen" class="user-card-avatar">
+                            <div class="user-card-info">
+                                <h5>Michael Chen <span class="match-score">88% Match</span></h5>
+                                <p><i class="fas fa-map-marker-alt me-1"></i>San Francisco, USA</p>
+                                <p><i class="fas fa-briefcase me-1"></i>UI/UX Designer</p>
+                            </div>
+                        </div>
+                        <div class="user-card-body">
+                            <div class="skill-section">
+                                <strong>Can teach:</strong>
+                                <span class="skill-tag">Figma</span>
+                                <span class="skill-tag">UI Design</span>
+                                <span class="skill-tag">Prototyping</span>
+                                <span class="skill-tag">User Research</span>
+                            </div>
+                            <div class="skill-section">
+                                <strong>Wants to learn:</strong>
+                                <span class="skill-tag">JavaScript</span>
+                                <span class="skill-tag">CSS Animations</span>
+                                <span class="skill-tag">Frontend Development</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary-custom btn-sm-custom flex-grow-1" onclick="sendConnection('Michael Chen', this)">
+                                <i class="fas fa-user-plus me-2"></i>Connect
+                            </button>
+                            <button class="btn btn-outline-custom btn-sm-custom">
+                                <i class="fas fa-eye me-2"></i>View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Match Card 3 -->
+                <div class="col-lg-6">
+                    <div class="user-card">
+                        <div class="user-card-header">
+                            <img src="https://i.pravatar.cc/150?img=5" alt="Alex Kumar" class="user-card-avatar">
+                            <div class="user-card-info">
+                                <h5>Alex Kumar <span class="match-score">82% Match</span></h5>
+                                <p><i class="fas fa-map-marker-alt me-1"></i>London, UK</p>
+                                <p><i class="fas fa-briefcase me-1"></i>Full Stack Developer</p>
+                            </div>
+                        </div>
+                        <div class="user-card-body">
+                            <div class="skill-section">
+                                <strong>Can teach:</strong>
+                                <span class="skill-tag">React</span>
+                                <span class="skill-tag">Node.js</span>
+                                <span class="skill-tag">MongoDB</span>
+                                <span class="skill-tag">API Design</span>
+                            </div>
+                            <div class="skill-section">
+                                <strong>Wants to learn:</strong>
+                                <span class="skill-tag">Machine Learning</span>
+                                <span class="skill-tag">Data Visualization</span>
+                                <span class="skill-tag">Python</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary-custom btn-sm-custom flex-grow-1" onclick="sendConnection('Alex Kumar', this)">
+                                <i class="fas fa-user-plus me-2"></i>Connect
+                            </button>
+                            <button class="btn btn-outline-custom btn-sm-custom">
+                                <i class="fas fa-eye me-2"></i>View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Match Card 4 -->
+                <div class="col-lg-6">
+                    <div class="user-card">
+                        <div class="user-card-header">
+                            <img src="https://i.pravatar.cc/150?img=27" alt="Emma Wilson" class="user-card-avatar">
+                            <div class="user-card-info">
+                                <h5>Emma Wilson <span class="match-score">79% Match</span></h5>
+                                <p><i class="fas fa-map-marker-alt me-1"></i>Toronto, Canada</p>
+                                <p><i class="fas fa-briefcase me-1"></i>Marketing Specialist</p>
+                            </div>
+                        </div>
+                        <div class="user-card-body">
+                            <div class="skill-section">
+                                <strong>Can teach:</strong>
+                                <span class="skill-tag">Digital Marketing</span>
+                                <span class="skill-tag">Content Writing</span>
+                                <span class="skill-tag">SEO</span>
+                                <span class="skill-tag">Social Media</span>
+                            </div>
+                            <div class="skill-section">
+                                <strong>Wants to learn:</strong>
+                                <span class="skill-tag">Data Analysis</span>
+                                <span class="skill-tag">Google Analytics</span>
+                                <span class="skill-tag">Excel</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-disabled btn-sm-custom flex-grow-1">
+                                <i class="fas fa-clock me-2"></i>Requested
+                            </button>
+                            <button class="btn btn-outline-custom btn-sm-custom">
+                                <i class="fas fa-eye me-2"></i>View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Match Card 5 -->
+                <div class="col-lg-6">
+                    <div class="user-card">
+                        <div class="user-card-header">
+                            <img src="https://i.pravatar.cc/150?img=60" alt="David Rodriguez" class="user-card-avatar">
+                            <div class="user-card-info">
+                                <h5>David Rodriguez <span class="match-score">76% Match</span></h5>
+                                <p><i class="fas fa-map-marker-alt me-1"></i>Madrid, Spain</p>
+                                <p><i class="fas fa-graduation-cap me-1"></i>Graphic Design Student</p>
+                            </div>
+                        </div>
+                        <div class="user-card-body">
+                            <div class="skill-section">
+                                <strong>Can teach:</strong>
+                                <span class="skill-tag">Adobe Illustrator</span>
+                                <span class="skill-tag">Photoshop</span>
+                                <span class="skill-tag">Brand Identity</span>
+                                <span class="skill-tag">Typography</span>
+                            </div>
+                            <div class="skill-section">
+                                <strong>Wants to learn:</strong>
+                                <span class="skill-tag">Web Design</span>
+                                <span class="skill-tag">UI Principles</span>
+                                <span class="skill-tag">HTML/CSS</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary-custom btn-sm-custom flex-grow-1" onclick="sendConnection('David Rodriguez', this)">
+                                <i class="fas fa-user-plus me-2"></i>Connect
+                            </button>
+                            <button class="btn btn-outline-custom btn-sm-custom">
+                                <i class="fas fa-eye me-2"></i>View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Match Card 6 -->
+                <div class="col-lg-6">
+                    <div class="user-card">
+                        <div class="user-card-header">
+                            <img src="https://i.pravatar.cc/150?img=32" alt="Lisa Wang" class="user-card-avatar">
+                            <div class="user-card-info">
+                                <h5>Lisa Wang <span class="match-score">85% Match</span></h5>
+                                <p><i class="fas fa-map-marker-alt me-1"></i>Sydney, Australia</p>
+                                <p><i class="fas fa-briefcase me-1"></i>Data Scientist</p>
+                            </div>
+                        </div>
+                        <div class="user-card-body">
+                            <div class="skill-section">
+                                <strong>Can teach:</strong>
+                                <span class="skill-tag">Python</span>
+                                <span class="skill-tag">R</span>
+                                <span class="skill-tag">SQL</span>
+                                <span class="skill-tag">Data Visualization</span>
+                            </div>
+                            <div class="skill-section">
+                                <strong>Wants to learn:</strong>
+                                <span class="skill-tag">Deep Learning</span>
+                                <span class="skill-tag">Big Data</span>
+                                <span class="skill-tag">Cloud Computing</span>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-primary-custom btn-sm-custom flex-grow-1" onclick="sendConnection('Lisa Wang', this)">
+                                <i class="fas fa-user-plus me-2"></i>Connect
+                            </button>
+                            <button class="btn btn-outline-custom btn-sm-custom">
+                                <i class="fas fa-eye me-2"></i>View Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <nav aria-label="Matches pagination">
+                    <ul class="pagination pagination-custom" id="matchesPagination">
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="changePage('prev')">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#" onclick="changePage(1)">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#" onclick="changePage(2)">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#" onclick="changePage(3)">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#" onclick="changePage('next')">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- ========== Footer ========== -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 CollabLearn. All rights reserved.</p>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Current page state
+        let currentPage = 1;
+        const totalPages = 3;
+        
+        // Function to send connection request
+        function sendConnection(userName, buttonElement) {
+            // Change button text and style to show pending state
+            buttonElement.innerHTML = '<i class="fas fa-clock me-2"></i>Requested';
+            buttonElement.classList.remove('btn-primary-custom');
+            buttonElement.classList.add('btn-disabled');
+            buttonElement.disabled = true;
+            
+            // In production: Make AJAX call to backend servlet
+            // Example: fetch('/api/connections/send', { 
+            //   method: 'POST', 
+            //   headers: {'Content-Type': 'application/json'},
+            //   body: JSON.stringify({userId: id}) 
+            // })
+        }
+        
+        // Function to handle pagination
+        function changePage(page) {
+            const pagination = document.getElementById('matchesPagination');
+            const pageItems = pagination.querySelectorAll('.page-item');
+            
+            // Handle previous/next buttons
+            if (page === 'prev' && currentPage > 1) {
+                currentPage--;
+            } else if (page === 'next' && currentPage < totalPages) {
+                currentPage++;
+            } else if (typeof page === 'number') {
+                currentPage = page;
+            }
+            
+            // Update active state
+            pageItems.forEach((item, index) => {
+                item.classList.remove('active');
+                // Skip prev/next buttons (first and last items)
+                if (index > 0 && index < pageItems.length - 1) {
+                    if (index === currentPage) {
+                        item.classList.add('active');
+                    }
+                }
+            });
+            
+            // In production: Make AJAX call to fetch new page data
+            console.log(`Loading page ${currentPage}`);
+            // Example: fetch(`/api/matches?page=${currentPage}`)
+        }
+        
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const skillFilter = document.getElementById('skillFilter');
+            const matchFilter = document.getElementById('matchFilter');
+            const locationFilter = document.getElementById('locationFilter');
+            
+            // Add event listeners for filters
+            [skillFilter, matchFilter, locationFilter].forEach(filter => {
+                filter.addEventListener('change', function() {
+                    // In production: Make AJAX call to backend with filter parameters
+                    console.log('Filters changed - would send request to backend');
+                    // Example: fetch(`/api/matches?skill=${skillFilter.value}&match=${matchFilter.value}&location=${locationFilter.value}`)
+                });
+            });
+        });
+    </script>
+</body>
+</html>
