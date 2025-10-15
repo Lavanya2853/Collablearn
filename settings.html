@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - CollabLearn</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ========== CSS Variables for Theme Management ========== */
+        :root {
+            --primary-sky: #576fe6;
+            --primary-violet: #965caf;
+            --accent-pink: #F1948A;
+            --bg-white: #FFFFFF;
+            --bg-light: #F8F9FA;
+            --text-dark: #2C3E50;
+            --text-muted: #7F8C8D;
+            --border-radius: 12px;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+            --transition: all 0.3s ease;
+            --success-green: #27AE60;
+            --warning-orange: #F39C12;
+            --danger-red: #E74C3C;
+        }
+        
+        /* ========== Animations ========== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ========== Global Styles ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        /* ========== Navigation Bar ========== */
+        .navbar {
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow-sm);
+            padding: 0.5rem 0;
+        }
+        
+        .navbar-brand {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin: 0 0.5rem;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-sky);
+        }
+        
+        .nav-link.active {
+            color: var(--primary-sky);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            border-radius: 2px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-red);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-sky);
+        }
+        
+        .dropdown-toggle::after {
+            display: none;
+        }
+        
+        /* ========== Page Container ========== */
+        .page-container {
+            padding: 2rem 0;
+            min-height: calc(100vh - 200px);
+        }
+        
+        /* ========== Page Header ========== */
+        .page-header {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .page-header-left h1 {
+            font-size: 2rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-header-left p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        
+        /* ========== Settings Container ========== */
+        .settings-container {
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        /* ========== Settings Layout ========== */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+        
+        /* ========== Settings Sidebar ========== */
+        .settings-sidebar {
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        
+        .settings-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .settings-menu-item {
+            margin-bottom: 0.5rem;
+        }
+        
+        .settings-menu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+        
+        .settings-menu-link i {
+            width: 24px;
+            margin-right: 0.75rem;
+            font-size: 1.1rem;
+        }
+        
+        .settings-menu-link:hover {
+            background: var(--bg-light);
+            color: var(--primary-sky);
+        }
+        
+        .settings-menu-link.active {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            color: white;
+        }
+        
+        /* ========== Settings Content ========== */
+        .settings-content {
+            background: var(--bg-white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .settings-section {
+            display: none;
+        }
+        
+        .settings-section.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--bg-light);
+        }
+        
+        .section-title i {
+            margin-right: 0.5rem;
+            color: var(--primary-sky);
+        }
+        
+        /* ========== Form Styles ========== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .form-control, .form-select {
+            border: 2px solid var(--bg-light);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+            font-family: 'Lato', sans-serif;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-sky);
+            box-shadow: 0 0 0 0.2rem rgba(87, 111, 230, 0.15);
+        }
+        
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        /* ========== Skills Input Container ========== */
+        .skills-input-container {
+            border: 2px solid var(--bg-light);
+            border-radius: 10px;
+            padding: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            transition: var(--transition);
+            background: var(--bg-white);
+            min-height: 80px;
+        }
+        
+        .skills-input-container:focus-within {
+            border-color: var(--primary-sky);
+            box-shadow: 0 0 0 0.2rem rgba(87, 111, 230, 0.15);
+        }
+        
+        .skill-tag {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .skill-tag:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .skill-tag .remove-tag {
+            cursor: pointer;
+            font-weight: bold;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        
+        .skill-tag .remove-tag:hover {
+            opacity: 1;
+        }
+        
+        .skill-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 150px;
+            padding: 0.5rem;
+            font-family: 'Lato', sans-serif;
+        }
+        
+        /* ========== Buttons ========== */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+            border: none;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .btn-primary-custom:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+            color: white;
+        }
+        
+        .btn-outline-custom {
+            border: 2px solid var(--primary-sky);
+            color: var(--primary-sky);
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            background: transparent;
+            transition: var(--transition);
+        }
+        
+        .btn-outline-custom:hover {
+            background: var(--primary-sky);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .btn-danger-custom {
+            background: var(--danger-red);
+            border: none;
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .btn-danger-custom:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            color: white;
+        }
+        
+        .btn-sm-custom {
+            padding: 0.4rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        /* ========== Action Buttons ========== */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--bg-light);
+        }
+        
+        /* ========== Notification Settings ========== */
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem;
+            background: var(--bg-light);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        .notification-info h5 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+        
+        .notification-info p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+        
+        /* ========== Toggle Switch ========== */
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 30px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background: linear-gradient(135deg, var(--primary-sky), var(--primary-violet));
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* ========== Privacy Settings ========== */
+        .privacy-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem;
+            background: var(--bg-light);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+        
+        /* ========== Danger Zone ========== */
+        .danger-zone {
+            background: #FFF5F5;
+            border: 2px solid #FEE;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .danger-zone h4 {
+            color: var(--danger-red);
+            margin-bottom: 1rem;
+        }
+        
+        /* ========== Success Alert ========== */
+        .success-alert {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--success-green);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            z-index: 1000;
+            animation: slideDown 0.3s ease;
+        }
+        
+        .success-alert.show {
+            display: flex;
+        }
+        
+        /* ========== Responsive Design ========== */
+        @media (max-width: 992px) {
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .settings-sidebar {
+                position: static;
+            }
+            
+            .settings-menu {
+                display: flex;
+                overflow-x: auto;
+                gap: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+            
+            .settings-menu-item {
+                margin-bottom: 0;
+                flex-shrink: 0;
+            }
+            
+            .settings-menu-link {
+                white-space: nowrap;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .settings-content {
+                padding: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- ========== Navigation Bar ========== -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fas fa-graduation-cap"></i> CollabLearn
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="matches.html">
+                            <i class="fas fa-users me-1"></i>Matches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="connections.html">
+                            <i class="fas fa-user-friends me-1"></i>Connections
+                        </a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link" href="requests.html">
+                            <i class="fas fa-bell me-1"></i>Requests
+                            <span class="notification-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="chat.html">
+                            <i class="fas fa-comments me-1"></i>Chat
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown ms-3">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <img src="https://i.pravatar.cc/150?img=12" alt="User Avatar" class="user-avatar">
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="profile-setup.html"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="settings.html"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="login.html"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- ========== Page Container ========== -->
+    <div class="page-container">
+        <div class="container">
+            
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1>Settings</h1>
+                    <p>Manage your account settings and preferences</p>
+                </div>
+            </div>
+            
+            <!-- Settings Layout -->
+            <div class="settings-layout">
+                
+                <!-- ========== Settings Sidebar ========== -->
+                <aside class="settings-sidebar">
+                    <ul class="settings-menu">
+                        <li class="settings-menu-item">
+                            <a href="#" class="settings-menu-link active" data-section="profile">
+                                <i class="fas fa-user"></i>
+                                <span>Profile</span>
+                            </a>
+                        </li>
+                        <li class="settings-menu-item">
+                            <a href="#" class="settings-menu-link" data-section="account">
+                                <i class="fas fa-user-circle"></i>
+                                <span>Account</span>
+                            </a>
+                        </li>
+                        <li class="settings-menu-item">
+                            <a href="#" class="settings-menu-link" data-section="security">
+                                <i class="fas fa-lock"></i>
+                                <span>Security</span>
+                            </a>
+                        </li>
+                        <li class="settings-menu-item">
+                            <a href="#" class="settings-menu-link" data-section="notifications">
+                                <i class="fas fa-bell"></i>
+                                <span>Notifications</span>
+                            </a>
+                        </li>
+                        <li class="settings-menu-item">
+                            <a href="#" class="settings-menu-link" data-section="privacy">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Privacy</span>
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+                
+                <!-- ========== Settings Content ========== -->
+                <main class="settings-content">
+                    
+                    <!-- ========== Profile Settings Section ========== -->
+                    <section class="settings-section active" id="profile-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-user"></i>Profile Settings
+                        </h2>
+                        
+                        <form id="profileForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="firstName" class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="firstName" value="John" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="lastName" value="Doe" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="bio" class="form-label">Bio</label>
+                                <textarea class="form-control" id="bio" rows="4">Passionate learner and teacher. Love sharing knowledge about web development and learning new design skills!</textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Skills You Can Teach</label>
+                                <div class="skills-input-container" id="teachSkillsContainer">
+                                    <div class="skill-tag">Python <span class="remove-tag" onclick="removeSkill(this)">×</span></div>
+                                    <div class="skill-tag">JavaScript <span class="remove-tag" onclick="removeSkill(this)">×</span></div>
+                                    <div class="skill-tag">React <span class="remove-tag" onclick="removeSkill(this)">×</span></div>
+                                    <input type="text" class="skill-input" id="teachSkillInput" placeholder="Add a skill...">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Skills You Want to Learn</label>
+                                <div class="skills-input-container" id="learnSkillsContainer">
+                                    <div class="skill-tag">UI/UX Design <span class="remove-tag" onclick="removeSkill(this)">×</span></div>
+                                    <div class="skill-tag">Figma <span class="remove-tag" onclick="removeSkill(this)">×</span></div>
+                                    <input type="text" class="skill-input" id="learnSkillInput" placeholder="Add a skill...">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="availability" class="form-label">Availability</label>
+                                        <select class="form-select" id="availability">
+                                            <option value="weekdays">Weekdays</option>
+                                            <option value="weekends">Weekends</option>
+                                            <option value="both" selected>Both</option>
+                                            <option value="flexible">Flexible</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="learningMode" class="form-label">Learning Mode</label>
+                                        <select class="form-select" id="learningMode">
+                                            <option value="online" selected>Online Only</option>
+                                            <option value="in-person">In-Person</option>
+                                            <option value="both">Both</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-outline-custom" onclick="resetProfileForm()">
+                                    <i class="fas fa-undo me-2"></i>Reset Changes
+                                </button>
+                                <button type="submit" class="btn btn-primary-custom">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                    
+                    <!-- ========== Account Settings Section ========== -->
+                    <section class="settings-section" id="account-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-user-circle"></i>Account Settings
+                        </h2>
+                        
+                        <form id="accountForm">
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" value="john.doe@example.com" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="username" value="johndoe123" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" value="+1 (555) 123-4567">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="timezone" class="form-label">Timezone</label>
+                                <select class="form-select" id="timezone">
+                                    <option value="UTC-5">EST (UTC-5)</option>
+                                    <option value="UTC-6">CST (UTC-6)</option>
+                                    <option value="UTC-7">MST (UTC-7)</option>
+                                    <option value="UTC-8" selected>PST (UTC-8)</option>
+                                    <option value="UTC">UTC</option>
+                                </select>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="button" class="btn btn-outline-custom" onclick="resetAccountForm()">
+                                    <i class="fas fa-undo me-2"></i>Reset Changes
+                                </button>
+                                <button type="submit" class="btn btn-primary-custom">
+                                    <i class="fas fa-save me-2"></i>Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                    
+                    <!-- ========== Security Settings Section ========== -->
+                    <section class="settings-section" id="security-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-lock"></i>Security Settings
+                        </h2>
+                        
+                        <form id="passwordForm">
+                            <div class="form-group">
+                                <label for="currentPassword" class="form-label">Current Password</label>
+                                <input type="password" class="form-control" id="currentPassword" placeholder="Enter current password" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="newPassword" class="form-label">New Password</label>
+                                <input type="password" class="form-control" id="newPassword" placeholder="Enter new password" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                                <input type="password" class="form-control" id="confirmPassword" placeholder="Re-enter new password" required>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button type="submit" class="btn btn-primary-custom">
+                                    <i class="fas fa-key me-2"></i>Change Password
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                    
+                    <!-- ========== Notifications Settings Section ========== -->
+                    <section class="settings-section" id="notifications-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-bell"></i>Notification Preferences
+                        </h2>
+                        
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h5>New Match Found</h5>
+                                <p>Get notified when we find a new learning match for you</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h5>Connection Requests</h5>
+                                <p>Receive emails when someone sends you a connection request</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="notification-item">
+                            <div class="notification-info">
+                                <h5>New Messages</h5>
+                                <p>Get notified when you receive a new chat message</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-primary-custom" onclick="saveNotifications()">
+                                <i class="fas fa-save me-2"></i>Save Preferences
+                            </button>
+                        </div>
+                    </section>
+                    
+                    <!-- ========== Privacy Settings Section ========== -->
+                    <section class="settings-section" id="privacy-section">
+                        <h2 class="section-title">
+                            <i class="fas fa-shield-alt"></i>Privacy Settings
+                        </h2>
+                        
+                        <div class="privacy-item">
+                            <div class="privacy-info">
+                                <h5>Show My Profile in Search</h5>
+                                <p>Allow others to find your profile when searching for matches</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="privacy-item">
+                            <div class="privacy-info">
+                                <h5>Show Online Status</h5>
+                                <p>Let your connections see when you're online</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button type="button" class="btn btn-primary-custom" onclick="savePrivacy()">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </div>
+                        
+                        <!-- Danger Zone -->
+                        <div class="danger-zone">
+                            <h4><i class="fas fa-exclamation-triangle me-2"></i>Danger Zone</h4>
+                            <p>Once you delete your account, there is no going back. Please be certain.</p>
+                            <button type="button" class="btn btn-danger-custom" onclick="confirmDeleteAccount()">
+                                <i class="fas fa-trash-alt me-2"></i>Delete My Account
+                            </button>
+                        </div>
+                    </section>
+                    
+                </main>
+            </div>
+            
+        </div>
+    </div>
+    
+    <!-- ========== Success Alert ========== -->
+    <div class="success-alert" id="successAlert">
+        <i class="fas fa-check-circle fa-lg"></i>
+        <span id="successMessage">Settings saved successfully!</span>
+    </div>
+    
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // ========== Settings Menu Navigation ==========
+        document.querySelectorAll('.settings-menu-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all links
+                document.querySelectorAll('.settings-menu-link').forEach(l => l.classList.remove('active'));
+                
+                // Add active class to clicked link
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('.settings-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show selected section
+                const sectionId = this.dataset.section + '-section';
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+        
+        // ========== Skills Management ==========
+        function removeSkill(element) {
+            element.parentElement.remove();
+        }
+        
+        // Add skill for "teach skills"
+        document.getElementById('teachSkillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const skill = this.value.trim();
+                if (skill) {
+                    const tag = document.createElement('div');
+                    tag.className = 'skill-tag';
+                    tag.innerHTML = `${skill} <span class="remove-tag" onclick="removeSkill(this)">×</span>`;
+                    this.parentElement.insertBefore(tag, this);
+                    this.value = '';
+                }
+            }
+        });
+        
+        // Add skill for "learn skills"
+        document.getElementById('learnSkillInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const skill = this.value.trim();
+                if (skill) {
+                    const tag = document.createElement('div');
+                    tag.className = 'skill-tag';
+                    tag.innerHTML = `${skill} <span class="remove-tag" onclick="removeSkill(this)">×</span>`;
+                    this.parentElement.insertBefore(tag, this);
+                    this.value = '';
+                }
+            }
+        });
+        
+        // ========== Form Submissions ==========
+        
+        // Profile Form
+        document.getElementById('profileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showSuccessAlert('Profile updated successfully!');
+        });
+        
+        // Account Form
+        document.getElementById('accountForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            showSuccessAlert('Account settings updated!');
+        });
+        
+        // Password Form
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (newPassword !== confirmPassword) {
+                alert('New passwords do not match!');
+                return;
+            }
+            
+            if (newPassword.length < 8) {
+                alert('Password must be at least 8 characters long!');
+                return;
+            }
+            
+            showSuccessAlert('Password changed successfully!');
+            this.reset();
+        });
+        
+        // ========== Reset Functions ==========
+        function resetProfileForm() {
+            document.getElementById('profileForm').reset();
+            showSuccessAlert('Changes reset');
+        }
+        
+        function resetAccountForm() {
+            document.getElementById('accountForm').reset();
+            showSuccessAlert('Changes reset');
+        }
+        
+        // ========== Save Functions ==========
+        function saveNotifications() {
+            showSuccessAlert('Notification preferences saved!');
+        }
+        
+        function savePrivacy() {
+            showSuccessAlert('Privacy settings saved!');
+        }
+        
+        // ========== Delete Account ==========
+        function confirmDeleteAccount() {
+            const confirmed = confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.');
+            
+            if (confirmed) {
+                const doubleConfirm = confirm('This will permanently delete all your data, connections, and messages. Continue?');
+                
+                if (doubleConfirm) {
+                    alert('Account deletion initiated. You will receive a confirmation email.');
+                }
+            }
+        }
+        
+        // ========== Success Alert ==========
+        function showSuccessAlert(message) {
+            const alert = document.getElementById('successAlert');
+            const messageSpan = document.getElementById('successMessage');
+            
+            messageSpan.textContent = message;
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
